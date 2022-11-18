@@ -1,0 +1,5 @@
+name: Log4m
+version: '${project.version}'
+main: com.github.siroio.log4m.log4m.Log4m
+api-version: 1.19
+description: The OP displays the commands executed by the player.

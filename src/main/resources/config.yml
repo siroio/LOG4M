@@ -1,0 +1,5 @@
+# $prefix, $sender, $command
+# カラーコードの "" # は必須
+color: "#a02eca"
+highlight: "#dc42b8"
+message: "[$prefix]<$sender> $command"
