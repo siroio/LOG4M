@@ -2,7 +2,9 @@ package com.github.siroio.log4m.log4m.PlayerList;
 
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public final class HighlightList {
 
@@ -26,5 +28,15 @@ public final class HighlightList {
 
     public static boolean isHighlight(Player player) {
         return players.contains(player);
+    }
+
+    public static List<String> GetPlayersToString() {
+        List<String> result = new ArrayList<>();
+        for(Player p : players) result.add(p.getName());
+        return result;
+    }
+
+    public static List<Player> GetPlayer() {
+        return new ArrayList<>(players);
     }
 }

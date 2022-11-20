@@ -18,19 +18,18 @@ public class UnknownCommandMessage extends EventListener {
     @EventHandler
     public void onMessage(PlayerCommandPreprocessEvent event) {
         // Disable Unknown Command Message
-        if(!event.getPlayer().isOp() || !isCancel(event.getMessage())) return;
+        if(!event.getPlayer().isOp()) return;
+        if(CheckHelp(event.getMessage())) return;
         event.setCancelled(true);
     }
 
     @EventHandler
     public void onConsoleMessage(ServerCommandEvent event) {
         // @ is the name of Command Block
-        if(event.getSender().getName().equals("@") || !isCancel(event.getCommand())) return;
-        event.setCancelled(true);
     }
 
-    private boolean isCancel(String message) {
-        String[] args = message.split(" ");
-        return Bukkit.getHelpMap().getHelpTopic(args[0]) == null;
+    private boolean CheckHelp(String msg) {
+        String[] args = msg.split(" ");
+        return !(Bukkit.getHelpMap().getHelpTopic(args[0]) == null);
     }
 }

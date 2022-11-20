@@ -6,6 +6,7 @@ import com.github.siroio.log4m.log4m.PlayerList.HighlightList;
 import com.github.siroio.log4m.log4m.Utility.StringUtils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,6 +27,7 @@ public class OnExecuteCommand extends EventListener {
         TextComponent cmp = new TextComponent(fromConfigFormat(sender.getName(), cmd));
         String HexCode = HighlightList.isHighlight(sender) ? log.Config().getHLcolor() : log.Config().getColor();
         cmp.setColor(ChatColor.of(HexCode));
+
         SendMessage(SENDMODE.OP, cmp);
     }
 

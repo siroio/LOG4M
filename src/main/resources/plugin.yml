@@ -3,3 +3,10 @@ version: '${project.version}'
 main: com.github.siroio.log4m.log4m.Log4m
 api-version: 1.19
 description: The OP displays the commands executed by the player.
+
+commands:
+  log4m:
+    description: Main Command
+permissions:
+  log4m.op:
+    default: op
