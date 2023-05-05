@@ -2,6 +2,7 @@ package com.github.siroio.log4m.log4m.Command.SubCommands;
 
 import com.github.siroio.log4m.log4m.PlayerList.HighlightList;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,29 +11,29 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class RemoveHighlightCommand implements CommandExecutor, TabCompleter {
+public class UnObserveCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Player player = null;
-        for (Player p : HighlightList.GetPlayer())
-            if(p.getName().equalsIgnoreCase(args[1]))
-                player = p;
-
-        if(player == null) return false;
+        if(args == null || args.length < 1) return ErrorMessage(sender);
+        Player player = HighlightList.getPlayer(args[0]);
+        if(player == null) return ErrorMessage(sender);
         HighlightList.Remove(player);
         return false;
     }
 
-
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if(args.length == 0) {
-            List<String> names = HighlightList.GetPlayersToString();
-            if(names.size() <= 0) return null;
-            return names;
+        if(args.length == 1) {
+            List<String> names = HighlightList.getPlayersToString();
+            return names.isEmpty() ? List.of() : names;
         }
+        return List.of();
+    }
 
-        return null;
+    private boolean ErrorMessage(CommandSender sender)
+    {
+        sender.sendMessage(ChatColor.RED + "Unknown Player");
+        return false;
     }
 }

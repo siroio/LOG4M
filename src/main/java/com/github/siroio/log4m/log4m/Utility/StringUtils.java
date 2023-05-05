@@ -1,6 +1,8 @@
 package com.github.siroio.log4m.log4m.Utility;
 
 public class StringUtils {
+    private StringUtils(){}
+
     public static String replaceByHand(final String original, final String old, final String replace) {
         int offset = 0;
         StringBuilder builder = new StringBuilder(original.length());

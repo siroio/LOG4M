@@ -11,43 +11,35 @@ public abstract class EventListener implements Listener {
 
     protected enum SENDMODE { ALWAYS, OP, PERM }
     protected final Plugin plugin;
-    protected final Log4m log;
 
-    public EventListener(Plugin plugin, Log4m log) {
+    public EventListener(Plugin plugin) {
         this.plugin = plugin;
-        this.log = log;
         EventRegister.getInstance().Register(this, plugin);
     }
 
     public void SendMessage(String msg, SENDMODE mode, String permission) {
-        if(mode == SENDMODE.ALWAYS) {
-            for (Player p : plugin.getServer().getOnlinePlayers()) {
-                p.sendMessage(msg);
-            }
-        }
+        plugin.getServer().getOnlinePlayers().stream()
+                .filter(p -> switch (mode) {
+                    case ALWAYS -> true;
+                    case OP -> p.isOp();
+                    case PERM -> p.hasPermission(permission);
+                }).forEach(p -> p.sendMessage(msg));
+    }
+    public void SendMessage(String msg, SENDMODE mode) {
+        SendMessage(msg, mode, "");
+    }
 
-        else if(mode == SENDMODE.OP) {
-            for (Player p : plugin.getServer().getOnlinePlayers()) {
-                if(p.isOp()) p.sendMessage(msg);
-            }
-        }
+    public void SendMessage(SENDMODE mode, String permission, BaseComponent... components) {
+        plugin.getServer().getOnlinePlayers().stream()
+                .filter(p -> switch (mode) {
+                    case ALWAYS -> true;
+                    case OP -> p.isOp();
+                    case PERM -> p.hasPermission(permission);
+                }).forEach(p -> p.spigot().sendMessage(components));
 
-        else if(mode == SENDMODE.PERM) {
-            for(Player p : plugin.getServer().getOnlinePlayers()) {
-                if(p.hasPermission(permission)) p.sendMessage(msg);
-            }
-        }
     }
 
     public void SendMessage(SENDMODE mode, BaseComponent... components) {
-        if(mode == SENDMODE.ALWAYS) {
-            for (Player p : plugin.getServer().getOnlinePlayers())
-                p.spigot().sendMessage(components);
-        }
-
-        else if (mode == SENDMODE.OP) {
-            for (Player p : plugin.getServer().getOnlinePlayers())
-                if(p.isOp()) p.spigot().sendMessage(components);
-        }
+        SendMessage(mode, "", components);
     }
 }

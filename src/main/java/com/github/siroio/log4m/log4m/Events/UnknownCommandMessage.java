@@ -11,8 +11,8 @@ import org.bukkit.plugin.Plugin;
 
 public class UnknownCommandMessage extends EventListener {
 
-    public UnknownCommandMessage(Plugin plugin, Log4m log) {
-        super(plugin, log);
+    public UnknownCommandMessage(Plugin plugin) {
+        super(plugin);
     }
 
     @EventHandler
@@ -21,11 +21,6 @@ public class UnknownCommandMessage extends EventListener {
         if(!event.getPlayer().isOp()) return;
         if(CheckHelp(event.getMessage())) return;
         event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onConsoleMessage(ServerCommandEvent event) {
-        // @ is the name of Command Block
     }
 
     private boolean CheckHelp(String msg) {

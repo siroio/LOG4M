@@ -1,44 +1,46 @@
 package com.github.siroio.log4m.log4m;
 
 import com.github.siroio.log4m.log4m.Command.CommandExec;
+import com.github.siroio.log4m.log4m.Command.CommandManager;
 import com.github.siroio.log4m.log4m.Config.Config;
-import com.github.siroio.log4m.log4m.Database.DBManager;
+import com.github.siroio.log4m.log4m.Database.ChatColorDatabase;
 import com.github.siroio.log4m.log4m.Events.OnExecuteCommand;
+import com.github.siroio.log4m.log4m.Events.OnPlayerJoin;
 import com.github.siroio.log4m.log4m.Events.UnknownCommandMessage;
 import com.github.siroio.log4m.log4m.PlayerList.HighlightList;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Objects;
 
 public final class Log4m extends JavaPlugin {
 
     public static final String Prefix = "LOG4M";
-    private Config config;
-    private DBManager manager;
+    private static Config config;
+    private static ChatColorDatabase manager;
 
     @Override
     public void onEnable() {
         // create config
         config = new Config(this);
         // add event
-        new OnExecuteCommand(this, this);
-        new UnknownCommandMessage(this, this);
+        new OnExecuteCommand(this);
+        new UnknownCommandMessage(this);
+        new OnPlayerJoin(this);
         // command register
-        getCommand("log4m").setExecutor(new CommandExec());
+        Objects.requireNonNull(getCommand("log4m")).setExecutor(new CommandExec());
         // connect db
-        manager = new DBManager("PlayerCnf.db");
-        getServer().getLogger().info(ChatColor.GREEN + "Enable Log4m");
+        manager = new ChatColorDatabase(getDataFolder().getAbsolutePath() + "/PlayerCnf.db");
     }
 
     @Override
     public void onDisable() {
+        manager.Close();
         HighlightList.Clear();
         HandlerList.unregisterAll(this);
-        getServer().getLogger().info(ChatColor.RED + "Disable Log4m");
     }
 
-    public Config Config() { return config; }
-    public DBManager GetDB() { return manager; }
+    public static Config Config() { return config; }
+    public static ChatColorDatabase GetDB() { return manager; }
 }
